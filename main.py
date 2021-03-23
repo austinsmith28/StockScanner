@@ -4,15 +4,17 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import requests
+import pandas as pd
+api_key = 'ddca75d268744b19b3cb78676aab6c54'
 
+ticker = 'MSFT'
+interval = '1min'
+technical = 'time_series'
 
+api_url = f'https://api.twelvedata.com/{technical}?symbol={ticker}&interval={interval}&outputsize=12&apikey={api_key}'
+data = requests.get(api_url).json()
+pdData = pd.DataFrame(data['values'])
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
+print(pdData)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
