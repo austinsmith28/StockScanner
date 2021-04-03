@@ -1,0 +1,116 @@
+<Toolbar>:
+    GridLayout:
+        cols: 7
+        size: root.width, 200
+        Button:
+            id: home_button
+            text: "home"
+            on_release: root.homepage()
+        Button:
+            id: news_button
+            text: "news"
+            on_release: root.news()
+        Button:
+            text: "login"
+            on_release: root.login()
+        Button:
+            id: tools_button
+            text: "tools"
+            on_release: root.tools()
+        Button:
+            id: settings_button
+            text: "settings"
+            on_release: root.settings()
+        Button:
+            id: search_button
+            text: "search"
+            on_release: root.search()
+        TextInput:
+            id: search_box
+            multiline: False
+
+<Homepage>:
+    id: homepage
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, 200
+
+        Toolbar:
+
+<News>
+
+<Tools>
+
+<Search>
+
+<Login>
+
+    id: login_popup
+    title: "login"
+    size_hint: (None, None)
+    size: (400, 400)
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        TextInput:
+            id: username
+            hint_text: "username"
+            multiline: False
+        TextInput:
+            id: password
+            hint_text: "password"
+            multiline: False
+            password: True
+        Button:
+            id: login_submit
+            text: "submit"
+            on_release: root.submit()
+        Button:
+            id: create_login_button
+            text: "create login"
+            on_release: root.create_login()
+
+
+<CreateLogin>
+
+    id: create_login_popup
+    title: "create"
+    size_hint: (None, None)
+    size: (400, 400)
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        TextInput:
+            id: username
+            hint_text: "username"
+            multiline: False
+        TextInput:
+            id: password1
+            hint_text: "password"
+            multiline: False
+            password: True
+        TextInput:
+            id: password2
+            hint_text: "password"
+            multiline: False
+            password: True
+        Button:
+            id: create_login_submit
+            text: "submit"
+            on_release: root.submit()
+
+<Error>
+    id: error_popup
+    title: "error"
+    size_hint: (None, None)
+    size: (300, 250)
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        Label:
+            id: error_label
+            text: "error"
+        Button:
+            id: error_button
+            text: "okay"
+            on_press: root.dismiss_error()
