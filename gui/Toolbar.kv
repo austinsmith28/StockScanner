@@ -1,0 +1,117 @@
+<TextInput>
+    multiline: False
+
+<Fundamentals>
+    id: fundamentals_grid
+    cols: 4
+
+    Label:
+        text: "volume"
+    TextInput:
+        id: volume_low
+    Label:
+        text: "to"
+    TextInput:
+        id: volume_high
+
+    Label:
+        text: "mkt cap"
+    TextInput:
+        id: mktcap_low
+    Label:
+        text: "to"
+    TextInput:
+        id: mktcap_high
+
+    Label:
+        text: "change"
+    TextInput:
+        id: change_low
+    Label:
+        text: "to"
+    TextInput:
+        id: change_high
+
+<Technical>
+    id: technical_grid
+    cols: 2
+
+    Label:
+        text: "Time period"
+    TextInput:
+        id: timeperiod
+
+    Label:
+        text: "Indicator"
+    Indicator:
+
+    Label:
+        text: "Threshold"
+    TextInput:
+        id: threshold
+
+<AssetType>
+    id: asset_spinner
+    text: ""
+    values:
+        ["value 1",
+        "value 2",
+        "value 3",
+        "value 4",
+        "value 5",
+        "value 6",
+        "value 7"]
+
+<Indicator>
+    id: indicator_spinner
+    text: ""
+    values:
+        ["value 1",
+        "value 2",
+        "value 3",
+        "value 4",
+        "value 5",
+        "value 6",
+        "value 7"]
+
+
+<Toolbar>
+    id: toolbar
+    size: 500, root.height
+
+    FloatLayout:
+        size: root.width, root.height
+
+        GridLayout:
+            cols: 2
+            size_hint: 1, .1
+            pos_hint: {"top": 1}
+
+            Label:
+                text: "Asset Type"
+            AssetType:
+
+        Label:
+            size_hint: 1, .1
+            pos_hint: {"top": .9}
+            text: "Fundamentals"
+
+        Fundamentals:
+            size_hint: 1, .1
+            pos_hint: {"top": .8}
+
+        Label:
+            size_hint: 1, .1
+            pos_hint: {"top": .7}
+            text: "Technical"
+
+        Technical:
+            size_hint: 1, .1
+            pos_hint: {"top": .6}
+
+        Button:
+            id: search_toolbar
+            size_hint: 1, .1
+            pos_hint: {"top": .5}
+            text: "Search"
+            on_release: root.search()
