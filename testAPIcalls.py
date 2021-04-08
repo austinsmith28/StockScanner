@@ -1,10 +1,36 @@
 import requests
-
+import bs4
 
 api_key = 'ddca75d268744b19b3cb78676aab6c54'
-
+'''
 price_url = f'https://api.twelvedata.com/price?symbol=AAPL&apikey={api_key}'
 
 stock_price = requests.get(price_url).json()
 
-print(stock_price['price'])
+print(stock_price['price'])'''
+
+
+allStocksUrl = f'https://api.twelvedata.com/stocks'
+
+allStockData = requests.get(allStocksUrl).json()
+
+allSymbols = []
+
+for i in allStockData['data']:
+    print(i['symbol'], " is on ", i['exchange'], " in the ", i['country'])
+'''
+url = "https://finance.yahoo.com/quote/"
+
+full_url = url + "aapl"
+
+response = requests.get(full_url).content
+
+soup = bs4.BeautifulSoup(response, 'html.parser')
+
+
+price = soup.body.find('span', class_="C($primaryColor) Fz(24px) Fw(b)").text
+
+print(type(price))
+
+#float_stock_price = float(stock_price)
+'''
