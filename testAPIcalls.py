@@ -38,6 +38,30 @@ print(type(price))
 '''
 
 
+def str_value_to_num(input_value):
+    output = input_value
+
+    if input_value[-1] == "T":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000000000  # Trillion
+
+    if input_value[-1] == "B":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000000  # Billion
+
+    if input_value[-1] == "M":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000  # Million
+
+    return output
+
+
 url = "https://finviz.com/quote.ashx?t="
 
 full_url = url + "aapl"
@@ -48,6 +72,8 @@ response = requests.get(full_url, headers=headers).content
 
 soup = bs4.BeautifulSoup(response, 'html.parser')
 
-average_volume = soup.find("td", text="Avg Volume").find_next_sibling("td").text
+average_volume = soup.find("td", text="Price").find_next_sibling("td").text
 
 print(average_volume)
+
+print(str_value_to_num(average_volume))

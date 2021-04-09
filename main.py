@@ -6,6 +6,7 @@
 
 import requests
 import bs4
+
 import json
 import pandas as pd
 
@@ -24,26 +25,58 @@ def remove_duplicates(array):
     return res
 
 
+def str_value_to_num(input_value):
+    output = input_value
+
+    if input_value[-1] == "T":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000000000  # Trillion
+
+    if input_value[-1] == "B":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000000  # Billion
+
+    if input_value[-1] == "M":
+        output = input_value[:-1]
+        output.replace(".", "")
+        output = float(output)
+        output = output * 1000000  # Million
+
+    return output
+
+
+def remove_commas(input_val):
+    return input_val.replace(",", "")
+
+
 def price_bounds(lower, upper, array):
     res = []
-    url = "https://finance.yahoo.com/quote/"
+    url = "https://finviz.com/quote.ashx?t="
 
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
 
         full_url = url + i
 
-        response = requests.get(full_url).content
+        response = requests.get(full_url, headers=headers).content
 
         soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             # stock_price = soup.body.find('span', class_="C($primaryColor) Fz(24px) Fw(b)").text
 
-            stock_price = soup.body.find('span', class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)").text
+            # stock_price = soup.body.find('span', class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)").text
+            stock_price = soup.find("td", text="Price").find_next_sibling("td").text
             # print("price of " , i, " is ", stock_price)
             float_stock_price = float(stock_price)
 
             if lower <= float_stock_price <= upper:
                 res.append(i)
+                print(i, " price is ", stock_price)
         except AttributeError:
             print("stock is ", i)
 
@@ -66,14 +99,58 @@ def price_bounds(lower, upper, array):
 
 
 def volume_bounds(lower, upper, array):
-    return
+    res = []
+    url = "https://finviz.com/quote.ashx?t="
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
+    for i in array:
+
+        full_url = url + i
+
+        response = requests.get(full_url, headers=headers).content
+
+        soup = bs4.BeautifulSoup(response, 'html.parser')
+        try:
+            stock_volume = soup.find("td", text="Volume").find_next_sibling("td").text
+            float_stock_volume = float(stock_volume)
+
+            if lower <= float_stock_volume <= upper:
+                res.append(i)
+                print(i, " price is ", stock_volume)
+        except AttributeError:
+            print("stock is ", i)
+    return res
 
 
 def market_cap_bounds(lower, upper, array):
+    res = []
+    url = "https://finviz.com/quote.ashx?t="
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
+    for i in array:
+
+        full_url = url + i
+
+        response = requests.get(full_url, headers=headers).content
+
+        soup = bs4.BeautifulSoup(response, 'html.parser')
+        try:
+            stock_volume = soup.find("td", text="Volume").find_next_sibling("td").text
+            stock_volume_no_comma = remove_commas(stock_volume)
+            float_stock_volume = float(stock_volume_no_comma)
+
+            if lower <= float_stock_volume <= upper:
+                res.append(i)
+                print(i, " volume is ", stock_volume)
+        except AttributeError:
+            print("stock is ", i)
     return
 
 
 def share_float_bounds(lower, upper, array):
+
     return
 
 
@@ -103,9 +180,10 @@ allSymbols = []
 
 for i in allStockData['data']:
     if no_numbers(i['symbol']) and i['type'] == "Common Stock" and (
-            i['exchange'] == "NASDAQ" or i['exchange'] == "NYSE"):  ###TODO: FIX HARD CODED STRING "COMMON STOCK" and exchanges
+            i['exchange'] == "NASDAQ" or i[
+        'exchange'] == "NYSE"):  ###TODO: FIX HARD CODED STRING "COMMON STOCK" and exchanges
         allSymbols.append(i['symbol'])
-
+print(len(allSymbols))
 newSymbols = remove_duplicates(allSymbols)
 
 price_bound_symbols = price_bounds(5, 10, newSymbols)  # TODO: FIX HARD CODED UPPER AND LOWER PRICE BOUNDS
