@@ -44,6 +44,7 @@
     Label:
         text: "Indicator"
     Indicator:
+        id: indicator
 
     Label:
         text: "Threshold"
@@ -77,7 +78,7 @@
 
 <Toolbar>
     id: toolbar
-    size: 500, root.height
+    size_hint: .3, 1
 
     FloatLayout:
         size: root.width, root.height
@@ -90,6 +91,7 @@
             Label:
                 text: "Asset Type"
             AssetType:
+                id: asset
 
         Label:
             size_hint: 1, .1
@@ -97,6 +99,7 @@
             text: "Fundamentals"
 
         Fundamentals:
+            id: fundamentals
             size_hint: 1, .1
             pos_hint: {"top": .8}
 
@@ -106,6 +109,7 @@
             text: "Technical"
 
         Technical:
+            id: technical
             size_hint: 1, .1
             pos_hint: {"top": .6}
 
