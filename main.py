@@ -113,7 +113,10 @@ def volume_bounds(lower, upper, array):
         soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             stock_volume = soup.find("td", text="Volume").find_next_sibling("td").text
-            float_stock_volume = float(stock_volume)
+
+            float_stock_volume = remove_commas(stock_volume)
+
+            float_stock_volume = float(float_stock_volume)
 
             if lower <= float_stock_volume <= upper:
                 res.append(i)
@@ -137,29 +140,93 @@ def market_cap_bounds(lower, upper, array):
 
         soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
-            stock_volume = soup.find("td", text="Volume").find_next_sibling("td").text
-            stock_volume_no_comma = remove_commas(stock_volume)
-            float_stock_volume = float(stock_volume_no_comma)
+            market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
+            market_cap = str_value_to_num(market_cap)
 
-            if lower <= float_stock_volume <= upper:
+            if lower <= market_cap <= upper:
                 res.append(i)
-                print(i, " volume is ", stock_volume)
+                print(i, " market cap is ", market_cap)
         except AttributeError:
             print("stock is ", i)
-    return
+    return res
 
 
 def share_float_bounds(lower, upper, array):
+    res = []
+    url = "https://finviz.com/quote.ashx?t="
 
-    return
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
+    for i in array:
+
+        full_url = url + i
+
+        response = requests.get(full_url, headers=headers).content
+
+        soup = bs4.BeautifulSoup(response, 'html.parser')
+        try:
+            share_float = soup.find("td", text="Shs Float").find_next_sibling("td").text
+            share_float = str_value_to_num(share_float)
+
+            if lower <= share_float <= upper:
+                res.append(i)
+                print(i, " share float is ", share_float)
+        except AttributeError:
+            print("stock is ", i)
+
+    return res
 
 
 def short_float_bounds(lower, upper, array):
-    return
+    res = []
+    url = "https://finviz.com/quote.ashx?t="
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
+    for i in array:
+
+        full_url = url + i
+
+        response = requests.get(full_url, headers=headers).content
+
+        soup = bs4.BeautifulSoup(response, 'html.parser')
+        try:
+            short_float = soup.find("td", text="Short Float").find_next_sibling("td").text
+            short_float = short_float[:-1]
+
+            if lower <= short_float <= upper:
+                res.append(i)
+                print(i, " short float is ", short_float)
+        except AttributeError:
+            print("stock is ", i)
+
+    return res
 
 
 def daily_change_percent(lower, upper, array):
-    return
+    res = []
+    url = "https://finviz.com/quote.ashx?t="
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/68.0.3440.106 Safari/537.36', }
+    for i in array:
+
+        full_url = url + i
+
+        response = requests.get(full_url, headers=headers).content
+
+        soup = bs4.BeautifulSoup(response, 'html.parser')
+        try:
+            change = soup.find("td", text="Change").find_next_sibling("td").text
+            change = change[:-1]
+
+            if lower <= change <= upper:
+                res.append(i)
+                print(i, " change is ", change)
+        except AttributeError:
+            print("stock is ", i)
+
+    return res
 
 
 # interval = input("Enter a Time Interval:")
@@ -171,6 +238,21 @@ def daily_change_percent(lower, upper, array):
 #       WILL EVENTUALLY BE ITS OWN FUNCTION TO CONNECT         #
 #       BACK-END WITH THE FRONT-END                            #
 ################################################################
+
+def search(search_dict):
+
+    asset = search_dict['asset']
+
+    vol_low = search_dict['vol_low']
+    vol_high = search_dict['vol_high']
+
+    mktcap_low = search_dict['mktcap_low']
+    mktcap_high = search_dict['mktcap_high']
+
+    c
+
+    return
+
 
 allStocksUrl = f'https://api.twelvedata.com/stocks'
 
