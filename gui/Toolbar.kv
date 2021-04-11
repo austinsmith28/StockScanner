@@ -1,11 +1,33 @@
+#:import Factory kivy.factory.Factory
+
 <TextInput>
     multiline: False
+
+<Spinner>
+    background_normal: ""
+    background_color: (1,1,1,1)
+    color: (0,0,0,1)
+
+    dropdown_cls: Factory.MyDropDown
+    option_cls: Factory.MySpinnerOptions
+
+<MySpinnerOptions@SpinnerOption>
+    height: 50
+    background_normal: ""
+    background_color: (1,1,1,1)
+    color: (0,0,0,1)
+
+<MyDropDown@DropDown>
 
 <Fundamentals>
     id: fundamentals_grid
     cols: 4
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "volume"
     TextInput:
         id: volume_low
@@ -15,6 +37,10 @@
         id: volume_high
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "mkt cap"
     TextInput:
         id: mktcap_low
@@ -24,6 +50,10 @@
         id: mktcap_high
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "change"
     TextInput:
         id: change_low
@@ -37,43 +67,46 @@
     cols: 2
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "Time period"
     TextInput:
         id: timeperiod
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "Indicator"
     Indicator:
         id: indicator
 
     Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "Threshold"
     TextInput:
         id: threshold
 
 <AssetType>
     id: asset_spinner
-    text: ""
+    text: "---"
     values:
-        ["value 1",
-        "value 2",
-        "value 3",
-        "value 4",
-        "value 5",
-        "value 6",
-        "value 7"]
+        ["---",
+        "Stock",
+        "Index",
+        "ETF",
+        "REIT"]
 
 <Indicator>
     id: indicator_spinner
-    text: ""
-    values:
-        ["value 1",
-        "value 2",
-        "value 3",
-        "value 4",
-        "value 5",
-        "value 6",
-        "value 7"]
+    text: "---"
+    values: ["---","EMA","SMA"]
 
 
 <Toolbar>
@@ -83,39 +116,65 @@
     FloatLayout:
         size: root.width, root.height
 
+        Label:
+            size_hint: 1, .066
+            pos_hint: {"top": 1}
+            halign: "left"
+            valign: "center"
+            text_size: self.size
+
+            text: "Tools"
+            bold: True
+
+
         GridLayout:
             cols: 2
-            size_hint: 1, .1
-            pos_hint: {"top": 1}
+            size_hint: 1, .033
+            pos_hint: {"top": .933}
 
             Label:
+                halign: "left"
+                valign: "center"
+                text_size: self.size
+
                 text: "Asset Type"
             AssetType:
                 id: asset
 
         Label:
-            size_hint: 1, .1
+            size_hint: 1, .05
             pos_hint: {"top": .9}
+            halign: "left"
+            valign: "center"
+            text_size: self.size
+
             text: "Fundamentals"
+            bold: True
 
         Fundamentals:
             id: fundamentals
             size_hint: 1, .1
-            pos_hint: {"top": .8}
+            pos_hint: {"top": .85}
 
         Label:
-            size_hint: 1, .1
-            pos_hint: {"top": .7}
+            size_hint: 1, .05
+            pos_hint: {"top": .75}
+            halign: "left"
+            valign: "center"
+            text_size: self.size
+
             text: "Technical"
+            bold: True
 
         Technical:
             id: technical
             size_hint: 1, .1
-            pos_hint: {"top": .6}
+            pos_hint: {"top": .7}
 
         Button:
             id: search_toolbar
-            size_hint: 1, .1
-            pos_hint: {"top": .5}
+            size_hint: .5, .05
+            pos_hint: {"top": .55, "center_x": .5}
+
             text: "Search"
             on_release: root.search()
