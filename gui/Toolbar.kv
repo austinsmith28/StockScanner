@@ -28,7 +28,7 @@
         valign: "center"
         text_size: self.size
 
-        text: "volume"
+        text: "Volume"
     TextInput:
         id: volume_low
     Label:
@@ -41,7 +41,7 @@
         valign: "center"
         text_size: self.size
 
-        text: "mkt cap"
+        text: "Mkt Cap"
     TextInput:
         id: mktcap_low
     Label:
@@ -54,7 +54,7 @@
         valign: "center"
         text_size: self.size
 
-        text: "change"
+        text: "Change"
     TextInput:
         id: change_low
     Label:
@@ -71,7 +71,7 @@
         valign: "center"
         text_size: self.size
 
-        text: "Time period"
+        text: "Time Period"
     TextInput:
         id: timeperiod
 
@@ -113,12 +113,14 @@
     id: toolbar
     size_hint: .3, 1
 
+
     FloatLayout:
-        size: root.width, root.height
+        size: root.size
+        pos: 50,0
 
         Label:
             size_hint: 1, .066
-            pos_hint: {"top": 1}
+            pos_hint: {"top": 1, "x": 0}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -130,7 +132,7 @@
         GridLayout:
             cols: 2
             size_hint: 1, .033
-            pos_hint: {"top": .933}
+            pos_hint: {"top": .933, "x": 0}
 
             Label:
                 halign: "left"
@@ -143,7 +145,7 @@
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .9}
+            pos_hint: {"top": .85, "x": 0}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -154,11 +156,11 @@
         Fundamentals:
             id: fundamentals
             size_hint: 1, .1
-            pos_hint: {"top": .85}
+            pos_hint: {"top": .8, "x": 0}
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .75}
+            pos_hint: {"top": .65, "x": 0}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -169,12 +171,12 @@
         Technical:
             id: technical
             size_hint: 1, .1
-            pos_hint: {"top": .7}
+            pos_hint: {"top": .6, "x": 0}
 
         Button:
             id: search_toolbar
             size_hint: .5, .05
-            pos_hint: {"top": .55, "center_x": .5}
+            pos_hint: {"top": .45, "center_x": .5}
 
             text: "Search"
             on_release: root.search()
