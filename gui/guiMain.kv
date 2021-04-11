@@ -1,0 +1,23 @@
+#:import Toolbar Toolbar
+
+<Screen>
+    size: self.width, self.height
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Toolbar:
+            size_hint: .3, 1
+            pos_hint: {"top": 1}
+
+        Label:
+
+            size_hint: .65, 1
+            pos_hint: {"x": .35}
+            canvas.before:
+                Color:
+                    rgba: (1,0,0,1)
+
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
