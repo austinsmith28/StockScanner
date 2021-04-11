@@ -43,6 +43,8 @@ class Toolbar(Widget):
             "indicator": technical.indicator.text,
             "threshold": technical.threshold.text
         }
+        print(dict)
+        return dict
 
 
 class Main(App):
