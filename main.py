@@ -5,16 +5,23 @@
 
 
 import requests
-import bs4
+from bs4 import BeautifulSoup,SoupStrainer
+import lxml
 
 import json
 import pandas as pd
 
 api_key = 'ddca75d268744b19b3cb78676aab6c54'
 
+session = requests.Session()
+adapter = requests.adapters.HTTPAdapter(
+    pool_connections=100,
+    pool_maxsize=100)
+session.mount('http://', adapter)
 
-def no_numbers(input_string):
-    return not any(char.isdigit() for char in input_string)
+
+def only_letters(input_string):
+    return any(char.isalpha() for char in input_string)
 
 
 def remove_duplicates(array):
@@ -63,9 +70,9 @@ def price_bounds(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
-
-        soup = bs4.BeautifulSoup(response, 'html.parser')
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
         try:
             # stock_price = soup.body.find('span', class_="C($primaryColor) Fz(24px) Fw(b)").text
 
@@ -73,12 +80,13 @@ def price_bounds(lower, upper, array):
             stock_price = soup.find("td", text="Price").find_next_sibling("td").text
             # print("price of " , i, " is ", stock_price)
             float_stock_price = float(stock_price)
-
+            print("im fast af boiii")
             if lower <= float_stock_price <= upper:
                 res.append(i)
-                print(i, " price is ", stock_price)
+                #print(i, " price is ", stock_price)
         except AttributeError:
-            print("stock is ", i)
+            pass
+            #print("stock is ", i)
 
         '''
         price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
@@ -108,9 +116,10 @@ def volume_bounds(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
 
-        soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             stock_volume = soup.find("td", text="Volume").find_next_sibling("td").text
 
@@ -123,6 +132,7 @@ def volume_bounds(lower, upper, array):
                 print(i, " price is ", stock_volume)
         except AttributeError:
             print("stock is ", i)
+            pass
     return res
 
 
@@ -136,9 +146,10 @@ def market_cap_bounds(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
 
-        soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
             market_cap = str_value_to_num(market_cap)
@@ -161,9 +172,10 @@ def share_float_bounds(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
 
-        soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             share_float = soup.find("td", text="Shs Float").find_next_sibling("td").text
             share_float = str_value_to_num(share_float)
@@ -187,9 +199,10 @@ def short_float_bounds(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
 
-        soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             short_float = soup.find("td", text="Short Float").find_next_sibling("td").text
             short_float = short_float[:-1]
@@ -213,9 +226,10 @@ def daily_change_percent(lower, upper, array):
 
         full_url = url + i
 
-        response = requests.get(full_url, headers=headers).content
+        response = session.get(full_url, headers=headers).content
+        strainer = SoupStrainer('table', class_="snapshot-table2")
+        soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
 
-        soup = bs4.BeautifulSoup(response, 'html.parser')
         try:
             change = soup.find("td", text="Change").find_next_sibling("td").text
             change = change[:-1]
@@ -229,6 +243,23 @@ def daily_change_percent(lower, upper, array):
     return res
 
 
+def get_stocks():
+    all_stocks_url = f'https://api.twelvedata.com/stocks'
+
+    all_stock_data = requests.get(all_stocks_url).json()
+
+    all_symbols = []
+
+    for i in all_stock_data['data']:
+        if only_letters(i['symbol']) and (i['exchange'] == "NASDAQ" or i['exchange'] == "NYSE") and i[
+            'type'] == "Common Stock":
+            all_symbols.append(i['symbol'])
+
+    new_symbols = remove_duplicates(all_symbols)
+    print(len(new_symbols))
+    return new_symbols
+
+
 # interval = input("Enter a Time Interval:")
 # technical = input("Enter a Technical Indicator:")
 
@@ -240,7 +271,6 @@ def daily_change_percent(lower, upper, array):
 ################################################################
 
 def search(search_dict):
-
     asset = search_dict['asset']
 
     vol_low = search_dict['vol_low']
@@ -249,38 +279,11 @@ def search(search_dict):
     mktcap_low = search_dict['mktcap_low']
     mktcap_high = search_dict['mktcap_high']
 
-    c
-
     return
 
 
-allStocksUrl = f'https://api.twelvedata.com/stocks'
+symbols = get_stocks()
 
-allStockData = requests.get(allStocksUrl).json()
-
-allSymbols = []
-
-for i in allStockData['data']:
-    if no_numbers(i['symbol']) and i['type'] == "Common Stock" and (
-            i['exchange'] == "NASDAQ" or i[
-        'exchange'] == "NYSE"):  ###TODO: FIX HARD CODED STRING "COMMON STOCK" and exchanges
-        allSymbols.append(i['symbol'])
-print(len(allSymbols))
-newSymbols = remove_duplicates(allSymbols)
-
-price_bound_symbols = price_bounds(5, 10, newSymbols)  # TODO: FIX HARD CODED UPPER AND LOWER PRICE BOUNDS
+price_bound_symbols = price_bounds(5, 10, symbols)  # TODO: FIX HARD CODED UPPER AND LOWER PRICE BOUNDS
 
 print(price_bound_symbols)
-
-'''
-for ticker in allSymbols:
-    counter = 0
-    api_url = f'https://api.twelvedata.com/{technical}?symbol={ticker}&interval={interval}&outputsize=12&apikey={api_key}'
-    data = requests.get(api_url).json()
-
-
-for j in data['meta']:
-    print(j['symbol'])
-
-
-'''
