@@ -28,6 +28,19 @@
         valign: "center"
         text_size: self.size
 
+        text: "Price"
+    TextInput:
+        id: price_low
+    Label:
+        text: "to"
+    TextInput:
+        id: price_high
+
+    Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
         text: "Volume"
     TextInput:
         id: volume_low
@@ -48,6 +61,32 @@
         text: "to"
     TextInput:
         id: mktcap_high
+
+    Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
+        text: "Share"
+    TextInput:
+        id: share_low
+    Label:
+        text: "to"
+    TextInput:
+        id: share_high
+
+    Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
+        text: "Short"
+    TextInput:
+        id: short_low
+    Label:
+        text: "to"
+    TextInput:
+        id: short_high
 
     Label:
         halign: "left"
@@ -154,12 +193,12 @@
 
         Fundamentals:
             id: fundamentals
-            size_hint: 1, .1
+            size_hint: 1, .2
             pos_hint: {"top": .8, "x": 0}
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .65, "x": 0}
+            pos_hint: {"top": .55, "x": 0}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -170,12 +209,12 @@
         Technical:
             id: technical
             size_hint: 1, .1
-            pos_hint: {"top": .6, "x": 0}
+            pos_hint: {"top": .5, "x": 0}
 
         Button:
             id: search_toolbar
             size_hint: .5, .05
-            pos_hint: {"top": .45, "center_x": .5}
+            pos_hint: {"top": .35, "center_x": .5}
 
             text: "Search"
             on_release: root.search()
