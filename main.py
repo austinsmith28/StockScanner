@@ -5,7 +5,7 @@
 
 
 import requests
-from bs4 import BeautifulSoup,SoupStrainer
+from bs4 import BeautifulSoup, SoupStrainer
 import lxml
 
 import json
@@ -17,7 +17,7 @@ session = requests.Session()
 adapter = requests.adapters.HTTPAdapter(
     pool_connections=100,
     pool_maxsize=100)
-session.mount('http://', adapter)
+session.mount('https://', adapter)
 
 
 def only_letters(input_string):
@@ -61,6 +61,7 @@ def remove_commas(input_val):
 
 
 def price_bounds(lower, upper, array):
+    counter = 0
     res = []
     url = "https://finviz.com/quote.ashx?t="
 
@@ -80,13 +81,14 @@ def price_bounds(lower, upper, array):
             stock_price = soup.find("td", text="Price").find_next_sibling("td").text
             # print("price of " , i, " is ", stock_price)
             float_stock_price = float(stock_price)
-            print("im fast af boiii")
+            print(counter)
+            counter += 1
             if lower <= float_stock_price <= upper:
                 res.append(i)
-                #print(i, " price is ", stock_price)
+                # print(i, " price is ", stock_price)
         except AttributeError:
             pass
-            #print("stock is ", i)
+            # print("stock is ", i)
 
         '''
         price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
@@ -129,7 +131,7 @@ def volume_bounds(lower, upper, array):
 
             if lower <= float_stock_volume <= upper:
                 res.append(i)
-                print(i, " price is ", stock_volume)
+                print(i, " volume is ", stock_volume)
         except AttributeError:
             print("stock is ", i)
             pass
@@ -169,7 +171,7 @@ def share_float_bounds(lower, upper, array):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
-
+        print('Trying ',i)
         full_url = url + i
 
         response = session.get(full_url, headers=headers).content
@@ -180,7 +182,7 @@ def share_float_bounds(lower, upper, array):
             share_float = soup.find("td", text="Shs Float").find_next_sibling("td").text
             share_float = str_value_to_num(share_float)
 
-            if lower <= share_float <= upper:
+            if share_float != "-" and lower <= share_float <= upper:
                 res.append(i)
                 print(i, " share float is ", share_float)
         except AttributeError:
@@ -273,11 +275,29 @@ def get_stocks():
 def search(search_dict):
     asset = search_dict['asset']
 
+    price_low = search_dict['price_low']
+    price_high = search_dict['price_high']
+
     vol_low = search_dict['vol_low']
     vol_high = search_dict['vol_high']
 
     mktcap_low = search_dict['mktcap_low']
     mktcap_high = search_dict['mktcap_high']
+
+    share_float_low = search_dict['share_low']
+    share_float_high = search_dict['share_high']
+
+    short_float_low = search_dict['short_low']
+    short_float_high = search_dict['short_high']
+
+    change_low = search_dict['change_low']
+    change_high = search_dict['change_high']
+
+    timeperiod = search_dict['timeperiod']
+    indicator = search_dict['indicator']
+    indicator_threshold = search_dict['threshold']
+
+    return_dict = []
 
     return
 
@@ -286,4 +306,8 @@ symbols = get_stocks()
 
 price_bound_symbols = price_bounds(5, 10, symbols)  # TODO: FIX HARD CODED UPPER AND LOWER PRICE BOUNDS
 
-print(price_bound_symbols)
+volume_bound_symbols = volume_bounds(100000, 200000000, price_bound_symbols)
+
+float_bound_symbols = share_float_bounds(500000, 50000000, volume_bound_symbols)
+
+print(float_bound_symbols)
