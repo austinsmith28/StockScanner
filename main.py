@@ -87,8 +87,8 @@ def price_bounds(lower, upper, array):
                 res.append(i)
                 # print(i, " price is ", stock_price)
         except AttributeError:
-            pass
             # print("stock is ", i)
+            pass
 
         '''
         price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
@@ -133,7 +133,7 @@ def volume_bounds(lower, upper, array):
                 res.append(i)
                 print(i, " volume is ", stock_volume)
         except AttributeError:
-            print("stock is ", i)
+            # print("stock is ", i)
             pass
     return res
 
@@ -158,9 +158,10 @@ def market_cap_bounds(lower, upper, array):
 
             if lower <= market_cap <= upper:
                 res.append(i)
-                print(i, " market cap is ", market_cap)
+                # print(i, " market cap is ", market_cap)
         except AttributeError:
-            print("stock is ", i)
+            # print("stock is ", i)
+            pass
     return res
 
 
@@ -171,7 +172,7 @@ def share_float_bounds(lower, upper, array):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
-        print('Trying ',i)
+        # print('Trying ',i)
         full_url = url + i
 
         response = session.get(full_url, headers=headers).content
@@ -184,10 +185,10 @@ def share_float_bounds(lower, upper, array):
 
             if share_float != "-" and lower <= share_float <= upper:
                 res.append(i)
-                print(i, " share float is ", share_float)
+                # print(i, " share float is ", share_float)
         except AttributeError:
-            print("stock is ", i)
-
+            # print("stock is ", i)
+            pass
     return res
 
 
@@ -211,9 +212,10 @@ def short_float_bounds(lower, upper, array):
 
             if lower <= short_float <= upper:
                 res.append(i)
-                print(i, " short float is ", short_float)
+                # print(i, " short float is ", short_float)
         except AttributeError:
-            print("stock is ", i)
+            # print("stock is ", i)
+            pass
 
     return res
 
@@ -234,13 +236,14 @@ def daily_change_percent(lower, upper, array):
 
         try:
             change = soup.find("td", text="Change").find_next_sibling("td").text
-            change = change[:-1]
+            change = float(change[:-1])
 
             if lower <= change <= upper:
                 res.append(i)
-                print(i, " change is ", change)
+                # print(i, " change is ", change)
         except AttributeError:
-            print("stock is ", i)
+            # print("stock is ", i)
+            pass
 
     return res
 
@@ -258,7 +261,7 @@ def get_stocks():
             all_symbols.append(i['symbol'])
 
     new_symbols = remove_duplicates(all_symbols)
-    print(len(new_symbols))
+    # print(len(new_symbols))
     return new_symbols
 
 
@@ -275,39 +278,45 @@ def get_stocks():
 def search(search_dict):
     asset = search_dict['asset']
 
-    price_low = search_dict['price_low']
-    price_high = search_dict['price_high']
+    symbols = get_stocks()
 
-    vol_low = search_dict['vol_low']
-    vol_high = search_dict['vol_high']
+    if search_dict['price_low'] != "" and search_dict['price_high'] != "":
+        price_low = float(search_dict['price_low'])
+        price_high = float(search_dict['price_high'])
+        symbols = price_bounds(price_low, price_high, symbols)
 
-    mktcap_low = search_dict['mktcap_low']
-    mktcap_high = search_dict['mktcap_high']
+    if search_dict['vol_low'] != "" and search_dict['vol_high'] != "":
+        vol_low = float(search_dict['vol_low'])
+        vol_high = float(search_dict['vol_high'])
+        symbols = volume_bounds(vol_low, vol_high, symbols)
 
-    share_float_low = search_dict['share_low']
-    share_float_high = search_dict['share_high']
+    if search_dict['share_low'] != "" and search_dict['share_high'] != "":
+        share_float_low = float(search_dict['share_low'])
+        share_float_high = float(search_dict['share_high'])
+        symbols = share_float_bounds(share_float_low, share_float_high, symbols)
 
-    short_float_low = search_dict['short_low']
-    short_float_high = search_dict['short_high']
+    if search_dict['short_low'] != "" and search_dict['short_high'] != "":
+        short_float_low = float(search_dict['short_low'])
+        short_float_high = float(search_dict['short_high'])
+        symbols = short_float_bounds(short_float_low, short_float_high, symbols)
 
-    change_low = search_dict['change_low']
-    change_high = search_dict['change_high']
+    if search_dict['mktcap_low'] != "" and search_dict['mktcap_high'] != "":
+        mktcap_low = float(search_dict['mktcap_low'])
+        mktcap_high = float(search_dict['mktcap_high'])
+        symbols = market_cap_bounds(mktcap_low, mktcap_high, symbols)
 
-    timeperiod = search_dict['timeperiod']
-    indicator = search_dict['indicator']
-    indicator_threshold = search_dict['threshold']
+    if search_dict['change_low'] != "" and search_dict['change_high'] != "":
+        change_low = float(search_dict['change_low'])
+        change_high = float(search_dict['change_high'])
+        symbols = daily_change_percent(change_low, change_high, symbols)
+
+    if search_dict['timeperiod'] != "" and search_dict['indicator'] != "" and search_dict['threshold'] != "":
+        timeperiod = float(search_dict['timeperiod'])
+        indicator = search_dict['indicator']
+        indicator_threshold = float(search_dict['threshold'])
 
     return_dict = []
 
-    return
+    # print(float_bound_symbols)
 
-
-symbols = get_stocks()
-
-price_bound_symbols = price_bounds(5, 10, symbols)  # TODO: FIX HARD CODED UPPER AND LOWER PRICE BOUNDS
-
-volume_bound_symbols = volume_bounds(100000, 200000000, price_bound_symbols)
-
-float_bound_symbols = share_float_bounds(500000, 50000000, volume_bound_symbols)
-
-print(float_bound_symbols)
+    return symbols
