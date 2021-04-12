@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.uix.spinner import Spinner
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
+import main
 
 Builder.load_file('Toolbar.kv')
 
@@ -49,8 +50,8 @@ class Toolbar(Widget):
             "indicator": technical.indicator.text,
             "threshold": technical.threshold.text
         }
-        print(dict)
-        return dict
+
+        return main.search(dict)
 
 
 class Main(App):
