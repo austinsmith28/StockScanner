@@ -4,6 +4,7 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 import main
+import time
 
 Builder.load_file('Toolbar.kv')
 
@@ -26,6 +27,7 @@ class Indicator(Spinner):
 
 class Toolbar(Widget):
     def search(self):
+        time1 = time.time_ns()
 
         fundamentals = self.ids.fundamentals.ids
         technical = self.ids.technical.ids
@@ -51,7 +53,14 @@ class Toolbar(Widget):
             "threshold": technical.threshold.text
         }
 
-        return main.search(dict)
+        time2 = time.time_ns()
+
+        print(main.search(dict))
+
+        time3 = time.time_ns()
+
+        print(time2 - time1)
+        print(time3 - time2)
 
 
 class Main(App):
