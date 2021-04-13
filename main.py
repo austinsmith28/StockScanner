@@ -248,6 +248,32 @@ def daily_change_percent(lower, upper, array):
     return res
 
 
+def moving_averages(indicator, interval, time_period, threshold, array):
+    res = []
+    for i in array:
+        url = f"https://api.twelvedata.com/{indicator}?symbol={i}&interval={interval}&time_period={time_period}&apikey={api_key} "
+        indicator_request = requests.get(url).json()
+
+        price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
+        stock_price_request = requests.get(price_url).json()
+        try:
+            stock_price = float(stock_price_request['price'])
+            indicator_price = float(indicator_request['values'][0][indicator])
+
+            threshold = threshold * .01
+
+            lower_threshold = stock_price * (1 - threshold)
+            upper_threshold = stock_price * (1 + threshold)
+
+            if lower_threshold <= indicator_price <= upper_threshold:
+                res.append(i)
+
+        except AttributeError:
+            pass
+
+    return res
+
+
 def get_stocks():
     all_stocks_url = f'https://api.twelvedata.com/stocks'
 
@@ -263,10 +289,6 @@ def get_stocks():
     new_symbols = remove_duplicates(all_symbols)
     # print(len(new_symbols))
     return new_symbols
-
-
-# interval = input("Enter a Time Interval:")
-# technical = input("Enter a Technical Indicator:")
 
 
 ################################################################
@@ -310,10 +332,14 @@ def search(search_dict):
         change_high = float(search_dict['change_high'])
         symbols = daily_change_percent(change_low, change_high, symbols)
 
-    if search_dict['timeperiod'] != "" and search_dict['indicator'] != "" and search_dict['threshold'] != "":
+    if search_dict['timeperiod'] != "" and search_dict['indicator'] != "" and search_dict['threshold'] != "" and \
+            search_dict['interval'] != "":
         timeperiod = float(search_dict['timeperiod'])
         indicator = search_dict['indicator']
         indicator_threshold = float(search_dict['threshold'])
+        interval = search_dict['interval']
+
+        symbols = moving_averages(indicator, interval, timeperiod, indicator_threshold, symbols)
 
     return_dict = []
 
