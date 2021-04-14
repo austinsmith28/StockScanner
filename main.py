@@ -155,8 +155,11 @@ def market_cap_bounds(lower, upper, array):
         try:
             market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
             market_cap = str_value_to_num(market_cap)
+            remove_commas(market_cap)
+            if market_cap != "-":
+                market_cap = float(market_cap)
 
-            if lower <= market_cap <= upper:
+            if market_cap != "-" and lower <= market_cap <= upper:
                 res.append(i)
                 # print(i, " market cap is ", market_cap)
         except AttributeError:
@@ -182,7 +185,8 @@ def share_float_bounds(lower, upper, array):
         try:
             share_float = soup.find("td", text="Shs Float").find_next_sibling("td").text
             share_float = str_value_to_num(share_float)
-
+            if share_float != "-":
+                share_float = float(share_float)
             if share_float != "-" and lower <= share_float <= upper:
                 res.append(i)
                 # print(i, " share float is ", share_float)
@@ -208,9 +212,10 @@ def short_float_bounds(lower, upper, array):
 
         try:
             short_float = soup.find("td", text="Short Float").find_next_sibling("td").text
-            short_float = short_float[:-1]
+            if short_float != "-":
+                short_float = float(short_float[:-1])
 
-            if lower <= short_float <= upper:
+            if short_float != "-" and lower <= short_float <= upper:
                 res.append(i)
                 # print(i, " short float is ", short_float)
         except AttributeError:
