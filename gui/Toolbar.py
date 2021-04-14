@@ -12,7 +12,8 @@ from kivy.uix.widget import Widget
 from threading import Thread
 
 Builder.load_file('Toolbar.kv')
-
+class Header(GridLayout):
+    pass
 class AssetType(Spinner):
     pass
 class Fundamentals(GridLayout):

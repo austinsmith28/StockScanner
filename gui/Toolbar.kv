@@ -1,4 +1,8 @@
 #:import Factory kivy.factory.Factory
+<Header>
+    id: header_grid
+    rows: 2
+
 
 <AssetType>
     id: asset_spinner
@@ -19,12 +23,12 @@
         valign: "center"
         text_size: self.size
 
-        text: "Price"
+        text: "Price     $"
     TextInput:
         id: price_low
         hint_text: "0.0"
     Label:
-        text: "to"
+        text: "      to    $"
     TextInput:
         id: price_high
         hint_text: "0.0"
@@ -185,9 +189,31 @@
     RelativeLayout:
         size: root.size
         pos: 25, 0
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: -25, 1120
+                size: 2000, 100
+        Button:
+            id: tools_page
+            text: "Tools"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .2}
+        Button:
+            text: "Page 2"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .75}
+        Button:
+            text: "Page 3"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": 1.3}
+
+
         Label:
             size_hint: 1, .066
-            pos_hint: {"top": 1}
+            pos_hint: {"top": .9}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -199,7 +225,7 @@
         GridLayout:
             cols: 2
             size_hint: 1, .033
-            pos_hint: {"top": .933}
+            pos_hint: {"top": .833}
 
             Label:
                 halign: "left"
@@ -213,7 +239,7 @@
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .85}
+            pos_hint: {"top": .75}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -224,11 +250,11 @@
         Fundamentals:
             id: fundamentals
             size_hint: 1, .2
-            pos_hint: {"top": .8}
+            pos_hint: {"top": .7}
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .55}
+            pos_hint: {"top": .45}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -239,12 +265,12 @@
         Technical:
             id: technical
             size_hint: 1, .133
-            pos_hint: {"top": .5}
+            pos_hint: {"top": .4}
 
         Button:
             id: search_toolbar
             size_hint: .5, .05
-            pos_hint: {"top": .317, "center_x": .5}
+            pos_hint: {"top": .217, "center_x": .5}
 
             text: "Search"
             on_release: root.search()
