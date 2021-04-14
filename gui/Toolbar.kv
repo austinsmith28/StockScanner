@@ -1,23 +1,14 @@
 #:import Factory kivy.factory.Factory
 
-<TextInput>
-    multiline: False
-
-<Spinner>
-    background_normal: ""
-    background_color: (1,1,1,1)
-    color: (0,0,0,1)
-
-    dropdown_cls: Factory.MyDropDown
-    option_cls: Factory.MySpinnerOptions
-
-<MySpinnerOptions@SpinnerOption>
-    height: 50
-    background_normal: ""
-    background_color: (1,1,1,1)
-    color: (0,0,0,1)
-
-<MyDropDown@DropDown>
+<AssetType>
+    id: asset_spinner
+    text: "---"
+    values:
+        ["---",
+        "Stock",
+        "Index",
+        "ETF",
+        "REIT"]
 
 <Fundamentals>
     id: fundamentals_grid
@@ -101,6 +92,33 @@
     TextInput:
         id: change_high
 
+<Indicator>
+    id: indicator_spinner
+    text: "---"
+    values: ["---","EMA","SMA"]
+
+<Interval>
+    id: interval_spinner
+    text: "---"
+    values: ["---","1min", "5min", "15min", "30min", "45min", "1h", "2h", "4h", "1 Day", "1 Week", "1 Month"]
+
+<Spinner>
+    background_normal: ""
+    background_color: (1,1,1,1)
+    color: (0,0,0,1)
+
+
+    dropdown_cls: Factory.MyDropDown
+    option_cls: Factory.MySpinnerOptions
+
+<MySpinnerOptions@SpinnerOption>
+    background_normal: ""
+    background_color: (1,1,1,1)
+    color: (0,0,0,1)
+
+
+<MyDropDown@DropDown>
+
 <Technical>
     id: technical_grid
     cols: 2
@@ -113,6 +131,15 @@
         text: "Time Period"
     TextInput:
         id: timeperiod
+
+    Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
+        text: "Time Interval"
+    Interval:
+        id: interval
 
     Label:
         halign: "left"
@@ -132,33 +159,19 @@
     TextInput:
         id: threshold
 
-<AssetType>
-    id: asset_spinner
-    text: "---"
-    values:
-        ["---",
-        "Stock",
-        "Index",
-        "ETF",
-        "REIT"]
-
-<Indicator>
-    id: indicator_spinner
-    text: "---"
-    values: ["---","EMA","SMA"]
-
+<TextInput>
+    multiline: False
 
 <Toolbar>
     id: toolbar
     size_hint: .3, 1
 
-    FloatLayout:
+    RelativeLayout:
         size: root.size
-        pos: 50,0
-
+        pos: 25, 0
         Label:
             size_hint: 1, .066
-            pos_hint: {"top": 1, "x": 0}
+            pos_hint: {"top": 1}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -170,7 +183,7 @@
         GridLayout:
             cols: 2
             size_hint: 1, .033
-            pos_hint: {"top": .933, "x": 0}
+            pos_hint: {"top": .933}
 
             Label:
                 halign: "left"
@@ -183,7 +196,7 @@
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .85, "x": 0}
+            pos_hint: {"top": .85}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -194,11 +207,11 @@
         Fundamentals:
             id: fundamentals
             size_hint: 1, .2
-            pos_hint: {"top": .8, "x": 0}
+            pos_hint: {"top": .8}
 
         Label:
             size_hint: 1, .05
-            pos_hint: {"top": .55, "x": 0}
+            pos_hint: {"top": .55}
             halign: "left"
             valign: "center"
             text_size: self.size
@@ -208,13 +221,13 @@
 
         Technical:
             id: technical
-            size_hint: 1, .1
-            pos_hint: {"top": .5, "x": 0}
+            size_hint: 1, .133
+            pos_hint: {"top": .5}
 
         Button:
             id: search_toolbar
             size_hint: .5, .05
-            pos_hint: {"top": .35, "center_x": .5}
+            pos_hint: {"top": .317, "center_x": .5}
 
             text: "Search"
             on_release: root.search()

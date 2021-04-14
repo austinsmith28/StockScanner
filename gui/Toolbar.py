@@ -1,4 +1,7 @@
 import queue
+
+from kivy.uix.boxlayout import BoxLayout
+
 import main
 import time
 from kivy.app import App
@@ -8,25 +11,18 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from threading import Thread
 
-
 Builder.load_file('Toolbar.kv')
-
-
-class Technical(GridLayout):
-    pass
-
-
-class Fundamentals(GridLayout):
-    pass
-
 
 class AssetType(Spinner):
     pass
-
-
+class Fundamentals(GridLayout):
+    pass
+class Interval(Spinner):
+    pass
 class Indicator(Spinner):
     pass
-
+class Technical(GridLayout):
+    pass
 
 class Toolbar(Widget):
 
@@ -58,6 +54,7 @@ class Toolbar(Widget):
             "change_high": fundamentals.change_high.text,
 
             "timeperiod": technical.timeperiod.text,
+            "interval": technical.interval.text,
             "indicator": technical.indicator.text,
             "threshold": technical.threshold.text
         }
@@ -74,7 +71,6 @@ class Toolbar(Widget):
         time2 = time.time()
         print("Function return time: " + str(time2 - time1) + " s")
         print(tool_list)
-
 
 class Main(App):
     def build(self):

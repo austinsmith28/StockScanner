@@ -3,17 +3,18 @@
 <Screen>
     size: self.width, self.height
 
-    FloatLayout:
+    BoxLayout:
+        orientation: "horizontal"
         size: root.width, root.height
-
+        padding: 50,0,0,0
         Toolbar:
+            id: toolbar
             size_hint: .3, 1
             pos_hint: {"top": 1}
 
         Label:
 
             size_hint: .65, 1
-            pos_hint: {"x": .35}
             canvas.before:
                 Color:
                     rgba: (1,0,0,1)
