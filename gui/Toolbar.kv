@@ -22,10 +22,12 @@
         text: "Price"
     TextInput:
         id: price_low
+        hint_text: "0.0"
     Label:
         text: "to"
     TextInput:
         id: price_high
+        hint_text: "0.0"
 
     Label:
         halign: "left"
@@ -35,10 +37,12 @@
         text: "Volume"
     TextInput:
         id: volume_low
+        hint_text: "0"
     Label:
         text: "to"
     TextInput:
         id: volume_high
+        hint_text: "0"
 
     Label:
         halign: "left"
@@ -48,10 +52,12 @@
         text: "Mkt Cap"
     TextInput:
         id: mktcap_low
+        hint_text: "0.0"
     Label:
         text: "to"
     TextInput:
         id: mktcap_high
+        hint_text: "0.0"
 
     Label:
         halign: "left"
@@ -61,10 +67,12 @@
         text: "Share"
     TextInput:
         id: share_low
+        hint_text: "0"
     Label:
         text: "to"
     TextInput:
         id: share_high
+        hint_text: "0"
 
     Label:
         halign: "left"
@@ -74,10 +82,12 @@
         text: "Short"
     TextInput:
         id: short_low
+        hint_text: "0"
     Label:
         text: "to"
     TextInput:
         id: short_high
+        hint_text: "0"
 
     Label:
         halign: "left"
@@ -87,10 +97,12 @@
         text: "Change"
     TextInput:
         id: change_low
+        hint_text: "0%"
     Label:
         text: "to"
     TextInput:
         id: change_high
+        hint_text: "0%"
 
 <Indicator>
     id: indicator_spinner
@@ -115,6 +127,8 @@
     background_normal: ""
     background_color: (1,1,1,1)
     color: (0,0,0,1)
+    size: 100, 44
+
 
 
 <MyDropDown@DropDown>
@@ -131,6 +145,7 @@
         text: "Time Period"
     TextInput:
         id: timeperiod
+        hint_text: "0"
 
     Label:
         halign: "left"
@@ -158,6 +173,7 @@
         text: "Threshold"
     TextInput:
         id: threshold
+        hint_text: "0"
 
 <TextInput>
     multiline: False
@@ -193,6 +209,7 @@
                 text: "Asset Type"
             AssetType:
                 id: asset
+
 
         Label:
             size_hint: 1, .05
