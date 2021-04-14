@@ -1,10 +1,13 @@
+import queue
+import main
+import time
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.spinner import Spinner
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
-import main
-import time
+from threading import Thread
+
 
 Builder.load_file('Toolbar.kv')
 
@@ -26,13 +29,19 @@ class Indicator(Spinner):
 
 
 class Toolbar(Widget):
+
     def search(self):
+        t1 = Thread(target=Toolbar.build_thread, args=[self])
+        t1.start()
+        return
+
+    def build_dict(self):
         time1 = time.time_ns()
 
         fundamentals = self.ids.fundamentals.ids
         technical = self.ids.technical.ids
 
-        dict = {
+        tool_dict = {
             "asset": self.ids.asset.text,
 
             "price_low": fundamentals.price_low.text,
@@ -54,13 +63,17 @@ class Toolbar(Widget):
         }
 
         time2 = time.time_ns()
+        print("Dictionary build time: " + str(time2 - time1) + " ns")
+        return tool_dict
 
-        print(main.search(dict))
+    def build_thread(self):
 
-        time3 = time.time_ns()
-
-        print(time2 - time1)
-        print(time3 - time2)
+        tool_dict = Toolbar.build_dict(self)
+        time1 = time.time()
+        tool_list = main.search(tool_dict)
+        time2 = time.time()
+        print("Function return time: " + str(time2 - time1) + " s")
+        print(tool_list)
 
 
 class Main(App):
