@@ -292,9 +292,7 @@ def get_stocks():
 
 
 ################################################################
-#       CURRENTLY RUNNING AS A SCRIPT BUT THE BELOW CODE       #
-#       WILL EVENTUALLY BE ITS OWN FUNCTION TO CONNECT         #
-#       BACK-END WITH THE FRONT-END                            #
+#     code below is the function that the front end calls      #
 ################################################################
 
 def search(search_dict):
@@ -335,7 +333,7 @@ def search(search_dict):
     if search_dict['timeperiod'] != "" and search_dict['indicator'] != "" and search_dict['threshold'] != "" and \
             search_dict['interval'] != "":
         timeperiod = float(search_dict['timeperiod'])
-        indicator = search_dict['indicator']
+        indicator = search_dict['indicator'].lower()
         indicator_threshold = float(search_dict['threshold'])
         interval = search_dict['interval']
 
