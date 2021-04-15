@@ -89,21 +89,23 @@ indicator_price = indicator_request['values'][0]['ema']
 print(indicator_price)
  '''
 
-url = f"https://api.twelvedata.com/ema?symbol=aapl&interval=1day&time_period=200&apikey={api_key}"
+url = f"https://api.twelvedata.com/ema?symbol=abcl&interval=1day&time_period=200&apikey={api_key}"
 indicator_request = requests.get(url).json()
 
-price_url = f'https://api.twelvedata.com/price?symbol=aapl&apikey={api_key}'
+price_url = f'https://api.twelvedata.com/price?symbol=abcl&apikey={api_key}'
 stock_price_request = requests.get(price_url).json()
+try:
+    stock_price = float(stock_price_request['price'])
+    indicator_price = float(indicator_request['values'][0]['ema'])
 
-stock_price = float(stock_price_request['price'])
-indicator_price = float(indicator_request['values'][0]['ema'])
+    threshold = 20 * .01
 
-threshold = 20 * .01
+    lower_threshold = stock_price * (1 - threshold)
+    upper_threshold = stock_price * (1 + threshold)
 
-lower_threshold = stock_price * (1 - threshold)
-upper_threshold = stock_price * (1 + threshold)
-
-if lower_threshold <= indicator_price <= upper_threshold:
-    print('yup')
+    if lower_threshold <= indicator_price <= upper_threshold:
+        print('yup')
+except KeyError:
+    print('value')
 
 

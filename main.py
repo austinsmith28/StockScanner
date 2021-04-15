@@ -6,6 +6,7 @@
 
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
+import time
 import lxml
 
 import json
@@ -81,7 +82,7 @@ def price_bounds(lower, upper, array):
             stock_price = soup.find("td", text="Price").find_next_sibling("td").text
             # print("price of " , i, " is ", stock_price)
             float_stock_price = float(stock_price)
-            print(counter)
+            print("helloprice",counter)
             counter += 1
             if lower <= float_stock_price <= upper:
                 res.append(i)
@@ -111,7 +112,7 @@ def price_bounds(lower, upper, array):
 def volume_bounds(lower, upper, array):
     res = []
     url = "https://finviz.com/quote.ashx?t="
-
+    counter = 0
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
@@ -128,20 +129,21 @@ def volume_bounds(lower, upper, array):
             float_stock_volume = remove_commas(stock_volume)
 
             float_stock_volume = float(float_stock_volume)
-
+            print("volume", counter, i)
             if lower <= float_stock_volume <= upper:
                 res.append(i)
                 print(i, " volume is ", stock_volume)
         except AttributeError:
             # print("stock is ", i)
             pass
+        counter+=1
     return res
 
 
 def market_cap_bounds(lower, upper, array):
     res = []
     url = "https://finviz.com/quote.ashx?t="
-
+    counter =0
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
@@ -151,7 +153,7 @@ def market_cap_bounds(lower, upper, array):
         response = session.get(full_url, headers=headers).content
         strainer = SoupStrainer('table', class_="snapshot-table2")
         soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
+        print("marketcap",counter)
         try:
             market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
             market_cap = str_value_to_num(market_cap)
@@ -165,13 +167,14 @@ def market_cap_bounds(lower, upper, array):
         except AttributeError:
             # print("stock is ", i)
             pass
+        counter+=1
     return res
 
 
 def share_float_bounds(lower, upper, array):
     res = []
     url = "https://finviz.com/quote.ashx?t="
-
+    counter =0
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
@@ -181,7 +184,7 @@ def share_float_bounds(lower, upper, array):
         response = session.get(full_url, headers=headers).content
         strainer = SoupStrainer('table', class_="snapshot-table2")
         soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
+        print("sharefloat", counter)
         try:
             share_float = soup.find("td", text="Shs Float").find_next_sibling("td").text
             share_float = str_value_to_num(share_float)
@@ -193,13 +196,14 @@ def share_float_bounds(lower, upper, array):
         except AttributeError:
             # print("stock is ", i)
             pass
+        counter+=1
     return res
 
 
 def short_float_bounds(lower, upper, array):
     res = []
     url = "https://finviz.com/quote.ashx?t="
-
+    counter =0
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
@@ -209,7 +213,7 @@ def short_float_bounds(lower, upper, array):
         response = session.get(full_url, headers=headers).content
         strainer = SoupStrainer('table', class_="snapshot-table2")
         soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
+        print("shortfloat", counter)
         try:
             short_float = soup.find("td", text="Short Float").find_next_sibling("td").text
             if short_float != "-":
@@ -221,6 +225,7 @@ def short_float_bounds(lower, upper, array):
         except AttributeError:
             # print("stock is ", i)
             pass
+        counter+=1
 
     return res
 
@@ -228,7 +233,7 @@ def short_float_bounds(lower, upper, array):
 def daily_change_percent(lower, upper, array):
     res = []
     url = "https://finviz.com/quote.ashx?t="
-
+    counter=0
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
                              'Chrome/68.0.3440.106 Safari/537.36', }
     for i in array:
@@ -238,7 +243,7 @@ def daily_change_percent(lower, upper, array):
         response = session.get(full_url, headers=headers).content
         strainer = SoupStrainer('table', class_="snapshot-table2")
         soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
+        print(counter)
         try:
             change = soup.find("td", text="Change").find_next_sibling("td").text
             change = float(change[:-1])
@@ -249,21 +254,35 @@ def daily_change_percent(lower, upper, array):
         except AttributeError:
             # print("stock is ", i)
             pass
-
+        counter+=1
     return res
 
 
 def moving_averages(indicator, interval, time_period, threshold, array):
     res = []
+    counter=1
+    print("indic",indicator)
+    print("interval", interval)
+    print("timeperio", time_period)
+    print('threshold', threshold)
     for i in array:
-        url = f"https://api.twelvedata.com/{indicator}?symbol={i}&interval={interval}&time_period={time_period}&apikey={api_key} "
+
+        if counter % 27 == 0:
+            print("pausing for 1 minute due to API restrictions")
+            time.sleep(61)
+
+        #url = f"https://api.twelvedata.com/{indicator}?symbol={i}&interval={interval}&time_period={time_period}&apikey={api_key} "
+        url = f"https://api.twelvedata.com/{indicator}?symbol={i}&interval={interval}&time_period={time_period}&apikey={api_key}"
+
         indicator_request = requests.get(url).json()
 
         price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
         stock_price_request = requests.get(price_url).json()
+        print("MA", counter)
         try:
+            print("trying ", i)
             stock_price = float(stock_price_request['price'])
-            indicator_price = float(indicator_request['values'][0][indicator])
+            indicator_price = float(indicator_request['values'][0]['ema'])
 
             threshold = threshold * .01
 
@@ -271,11 +290,13 @@ def moving_averages(indicator, interval, time_period, threshold, array):
             upper_threshold = stock_price * (1 + threshold)
 
             if lower_threshold <= indicator_price <= upper_threshold:
+                print(i, " was accepted")
                 res.append(i)
 
-        except AttributeError:
+        except KeyError:
+            print("keyerror")
             pass
-
+        counter+=1
     return res
 
 
@@ -302,50 +323,59 @@ def get_stocks():
 
 def search(search_dict):
     asset = search_dict['asset']
+    print("backend",search_dict)
 
     symbols = get_stocks()
 
     if search_dict['price_low'] != "" and search_dict['price_high'] != "":
+        print("starting price func")
         price_low = float(search_dict['price_low'])
         price_high = float(search_dict['price_high'])
         symbols = price_bounds(price_low, price_high, symbols)
-
+        print("print this", symbols)
     if search_dict['vol_low'] != "" and search_dict['vol_high'] != "":
+        print("starting vol func")
         vol_low = float(search_dict['vol_low'])
         vol_high = float(search_dict['vol_high'])
         symbols = volume_bounds(vol_low, vol_high, symbols)
-
+        print("print this", symbols)
     if search_dict['share_low'] != "" and search_dict['share_high'] != "":
+        print("starting float func")
         share_float_low = float(search_dict['share_low'])
         share_float_high = float(search_dict['share_high'])
         symbols = share_float_bounds(share_float_low, share_float_high, symbols)
-
+        print("print this", symbols)
     if search_dict['short_low'] != "" and search_dict['short_high'] != "":
+        print("starting short func")
         short_float_low = float(search_dict['short_low'])
         short_float_high = float(search_dict['short_high'])
         symbols = short_float_bounds(short_float_low, short_float_high, symbols)
-
+        print("print this", symbols)
     if search_dict['mktcap_low'] != "" and search_dict['mktcap_high'] != "":
+        print("starting marketcap func")
         mktcap_low = float(search_dict['mktcap_low'])
         mktcap_high = float(search_dict['mktcap_high'])
         symbols = market_cap_bounds(mktcap_low, mktcap_high, symbols)
-
+        print("print this", symbols)
     if search_dict['change_low'] != "" and search_dict['change_high'] != "":
+        print("starting change func")
         change_low = float(search_dict['change_low'])
         change_high = float(search_dict['change_high'])
         symbols = daily_change_percent(change_low, change_high, symbols)
-
+        print("print this", symbols)
     if search_dict['timeperiod'] != "" and search_dict['indicator'] != "" and search_dict['threshold'] != "" and \
             search_dict['interval'] != "":
-        timeperiod = float(search_dict['timeperiod'])
-        indicator = search_dict['indicator'].lower()
+        print("starting technicals func")
+        timeperiod = int(search_dict['timeperiod'])
+        indicator = search_dict['indicator'].lower().replace(" ","")
         indicator_threshold = float(search_dict['threshold'])
-        interval = search_dict['interval']
+        interval = search_dict['interval'].replace(" ", "").lower()
 
         symbols = moving_averages(indicator, interval, timeperiod, indicator_threshold, symbols)
-
+        print("print this", symbols)
     return_dict = []
 
     # print(float_bound_symbols)
+    print("print this", symbols)
 
     return symbols
