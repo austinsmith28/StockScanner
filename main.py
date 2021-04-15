@@ -265,6 +265,8 @@ def moving_averages(indicator, interval, time_period, threshold, array):
     print("interval", interval)
     print("timeperio", time_period)
     print('threshold', threshold)
+
+    threshold = threshold * .01
     for i in array:
 
         if counter % 27 == 0:
@@ -284,7 +286,7 @@ def moving_averages(indicator, interval, time_period, threshold, array):
             stock_price = float(stock_price_request['price'])
             indicator_price = float(indicator_request['values'][0]['ema'])
 
-            threshold = threshold * .01
+
 
             lower_threshold = stock_price * (1 - threshold)
             upper_threshold = stock_price * (1 + threshold)
