@@ -153,19 +153,19 @@ def market_cap_bounds(lower, upper, array):
         response = session.get(full_url, headers=headers).content
         strainer = SoupStrainer('table', class_="snapshot-table2")
         soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-        print("marketcap",counter)
+        print("marketcap",counter, "trying ", i)
         try:
             market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
-            market_cap = str_value_to_num(market_cap)
             remove_commas(market_cap)
+            market_cap = str_value_to_num(market_cap)
             if market_cap != "-":
                 market_cap = float(market_cap)
 
             if market_cap != "-" and lower <= market_cap <= upper:
                 res.append(i)
-                # print(i, " market cap is ", market_cap)
+                print(i, " market cap is ", market_cap)
         except AttributeError:
-            # print("stock is ", i)
+            print("stock is ", i)
             pass
         counter+=1
     return res
@@ -284,7 +284,7 @@ def moving_averages(indicator, interval, time_period, threshold, array):
         try:
             print("trying ", i)
             stock_price = float(stock_price_request['price'])
-            indicator_price = float(indicator_request['values'][0]['ema'])
+            indicator_price = float(indicator_request['values'][0]['ema'])      #TODO: fix ema hard coded value
 
 
 
@@ -310,7 +310,7 @@ def get_stocks():
     all_symbols = []
 
     for i in all_stock_data['data']:
-        if only_letters(i['symbol']) and (i['exchange'] == "NASDAQ" or i['exchange'] == "NYSE") and i[
+        if only_letters(i['symbol']) and (i['exchange'] == "NASDAQ" or i['exchange'] == "NYSE" or i['exchange'] == "AMEX") and i[
             'type'] == "Common Stock":
             all_symbols.append(i['symbol'])
 
