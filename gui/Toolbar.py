@@ -1,7 +1,3 @@
-import queue
-
-from kivy.uix.boxlayout import BoxLayout
-
 import main
 import time
 from kivy.app import App

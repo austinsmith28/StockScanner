@@ -1,4 +1,5 @@
 #:import Toolbar Toolbar
+#:import Display displayMain
 
 <Screen>
     size: self.width, self.height
@@ -12,13 +13,7 @@
             size_hint: .3, 1
             pos_hint: {"top": 1}
 
-        Label:
+        Display:
 
             size_hint: .65, 1
-            canvas.before:
-                Color:
-                    rgba: (1,0,0,1)
 
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
