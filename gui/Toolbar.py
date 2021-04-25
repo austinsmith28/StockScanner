@@ -12,7 +12,8 @@ from kivy.uix.widget import Widget
 from threading import Thread
 
 Builder.load_file('Toolbar.kv')
-
+class Header(GridLayout):
+    pass
 class AssetType(Spinner):
     pass
 class Fundamentals(GridLayout):
@@ -67,6 +68,7 @@ class Toolbar(Widget):
 
         tool_dict = Toolbar.build_dict(self)
         time1 = time.time()
+        #print(tool_dict)
         tool_list = main.search(tool_dict)
         time2 = time.time()
         print("Function return time: " + str(time2 - time1) + " s")
