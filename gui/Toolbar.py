@@ -1,8 +1,7 @@
-import queue
-
 from kivy.uix.boxlayout import BoxLayout
 
 import main
+import StockDisplay
 import time
 from kivy.app import App
 from kivy.lang import Builder
@@ -11,6 +10,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from threading import Thread
 
+t1 = Thread()
 Builder.load_file('Toolbar.kv')
 
 class AssetType(Spinner):
@@ -71,6 +71,7 @@ class Toolbar(Widget):
         time2 = time.time()
         print("Function return time: " + str(time2 - time1) + " s")
         print(tool_list)
+
 
 class Main(App):
     def build(self):
