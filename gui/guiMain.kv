@@ -1,10 +1,12 @@
 #:import Toolbar Toolbar
-#:import StockDisplay StockDisplay
+#:import Display displayMain
 
 <Screen>
+    id: sc
     size: self.width, self.height
 
     BoxLayout:
+        id: bl
         orientation: "horizontal"
         size: root.width, root.height
         padding: 50,0,0,0
@@ -13,6 +15,7 @@
             size_hint: .3, 1
             pos_hint: {"top": 1}
 
-        StockDisplay:
-
+        Display:
+            id: display
             size_hint: .65, 1
+

@@ -1,8 +1,7 @@
-from kivy.uix.boxlayout import BoxLayout
-
 import main
-import StockDisplay
+import displayMain
 import time
+from guiMain import Screen
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.spinner import Spinner
@@ -10,9 +9,10 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from threading import Thread
 
-t1 = Thread()
 Builder.load_file('Toolbar.kv')
 
+class Header(GridLayout):
+    pass
 class AssetType(Spinner):
     pass
 class Fundamentals(GridLayout):
@@ -71,7 +71,8 @@ class Toolbar(Widget):
         time2 = time.time()
         print("Function return time: " + str(time2 - time1) + " s")
         print(tool_list)
-
+        Screen.set_list(tool_list)
+        return
 
 class Main(App):
     def build(self):
