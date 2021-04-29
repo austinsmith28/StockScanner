@@ -466,7 +466,7 @@ for stocks based on their criteria entered on the front-end GUI.
 
 Args:
     search_dict::dict
-
+        dictionary received from the front end of user input criteria 
 Returns:
     symbols::array
         the resulting stock tickers left after being bound to ALL of the users criteria provided
