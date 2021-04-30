@@ -1,0 +1,120 @@
+##:import Toolbar Toolbar
+
+
+# toolbar.kv
+    RelativeLayout:
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: -25, 1120
+                size: 2000, 100
+        Button:
+            id: tools_page
+            text: "Tools"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .2}
+        Button:
+            text: "Calc"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .75}
+        Button:
+            text: "Page ?"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": 1.3}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<CustButton@Button>:
+    font_size: 32
+
+<Header>
+    id: header_grid
+    rows: 2
+
+<TimeRange>
+    id: time_range
+    text: "---"
+    values:
+        ["---",
+        "1 week",
+        "1 month",
+        "3 months",
+        "6 months",
+        "1 year",
+        "2 years"]
+
+<calc>
+    id: header_grid
+    rows: 2
+    padding: 10
+    spacing: 10
+
+    Label:
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+
+        text: "Price     $"
+    TextInput:
+        id: price_low
+        hint_text: "0.0"
+
+    RelativeLayout:
+        size: root.size
+        pos: 25, 0
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: -25, 1120
+                size: 2000, 100
+        TextInput:
+            id: entry
+            font_size: 32
+            multiline: False
+        Label:
+            size_hint: 1, .066
+            pos_hint: {"top": .9}
+            halign: "left"
+            valign: "center"
+            text_size: self.size
+            text: "Time Range"
+        Label:
+            size_hint: 1, .066
+            pos_hint: {"top": .8}
+            halign: "left"
+            valign: "center"
+            text_size: self.size
+            text: "Avg Daily Gain %"
+    BoxLayout:
+        spacing: 10
+        CustButton:
+            text: "Calculate"
+        Button:
+            id: tools_page
+            text: "Tools"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .2}
+        Button:
+            text: "Calc"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": .75}
+        Button:
+            text: "Page ?"
+            size_hint: .5, .05
+            pos_hint: {"top": .99, "center_x": 1.3}
