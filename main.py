@@ -7,9 +7,11 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 import time
+import lxml
 
 api_key = 'ddca75d268744b19b3cb78676aab6c54'
 
+prices_of_stocks = []
 # Creating Open Session so HTTP requests do not create a new session each time a request is made.
 session = requests.Session()
 adapter = requests.adapters.HTTPAdapter(
@@ -138,9 +140,8 @@ def price_bounds(lower, upper, array):
 
             if lower <= float_stock_price <= upper:
                 res.append(i)
-
         except AttributeError:
-            print("AttributeError on ", i)
+            #print("AttributeError on ", i)
             pass
 
     return res
@@ -455,7 +456,24 @@ def get_stocks():
     # print(len(new_symbols))
     return new_symbols
 
+def get_prices(array):
+    print("get prices func")
+    res = []
+    counter = 0
 
+    for i in array:
+
+        if counter % 55 == 0:
+            print("pausing for 1 minute due to API restrictions")
+            time.sleep(61)
+
+        price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
+        stock_price_request = requests.get(price_url).json()
+
+        res.append(stock_price_request['price'])
+        counter += 1
+
+    return res
 ################################################################
 #     code below is the function that the front end calls      #
 ################################################################
@@ -528,5 +546,6 @@ def search(search_dict):
         interval = search_dict['interval'].replace(" ", "").lower()
 
         symbols = moving_averages(indicator, interval, timeperiod, indicator_threshold, symbols)
+
 
     return symbols

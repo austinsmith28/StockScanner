@@ -70,21 +70,7 @@ def str_value_to_num(input_value):
     return output
 
 
-url = "https://finviz.com/quote.ashx?t="
 
-full_url = url + "aapl"
-
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
-                         'Chrome/68.0.3440.106 Safari/537.36', }
-response = requests.get(full_url, headers=headers).content
-
-soup = bs4.BeautifulSoup(response, 'html.parser')
-
-average_volume = soup.find("td", text="Price").find_next_sibling("td").text
-
-print(average_volume)
-
-print(str_value_to_num(average_volume)
 
 
 
@@ -136,6 +122,17 @@ market_cap = soup.find("td", text="Market Cap").find_next_sibling("td").text
 print(market_cap)
 
 '''
+url = "https://finviz.com/quote.ashx?t="
 
-this = {"this is":12}
-print(type(this))
+full_url = url + "aapl"
+
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) '
+                         'Chrome/68.0.3440.106 Safari/537.36', }
+response = requests.get(full_url, headers=headers).content
+
+soup = BeautifulSoup(response, 'html.parser')
+
+average_volume = soup.find("td", text="Price").find_next_sibling("td").text
+
+print(average_volume)
+
