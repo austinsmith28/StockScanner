@@ -474,6 +474,25 @@ def get_prices(array):
         counter += 1
 
     return res
+
+def get_prices(array):
+    print("get prices func")
+    res = []
+    counter = 0
+
+    for i in array:
+
+        if counter % 55 == 0:
+            print("pausing for 1 minute due to API restrictions")
+            time.sleep(61)
+
+        price_url = f'https://api.twelvedata.com/price?symbol={i}&apikey={api_key}'
+        stock_price_request = requests.get(price_url).json()
+
+        res.append(stock_price_request['price'])
+        counter += 1
+
+    return res
 ################################################################
 #     code below is the function that the front end calls      #
 ################################################################
