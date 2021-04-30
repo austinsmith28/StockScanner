@@ -10,6 +10,7 @@ Builder.load_file('displayMain.kv')
 display = Widget
 tlist ={}
 p = 0
+cap = 1
 
 class Display(BoxLayout):
 
@@ -19,12 +20,19 @@ class Display(BoxLayout):
         display = self
 
     def build(self, list):
-        x = 0
-        display.clear_widgets()
         global tlist
         global p
+        global cap
+        display.clear_widgets()
+
         tlist = list
         p = 0
+
+        while len(tlist) % 24 != 0:
+            tlist.append("")
+
+        cap = len(tlist) / 24
+
         print("blubber boy")
 
         Display.ihatethis(self, p)
@@ -41,10 +49,15 @@ class Display(BoxLayout):
 
     def next(self, instance):
         print("beotch")
-        display.clear_widgets()
         global p
+        global cap
+
         p = p + 1
-        Display.ihatethis(self, p)
+        if p < cap:
+            display.clear_widgets()
+            Display.ihatethis(self, p)
+        else:
+            print("ur mom")
 
 
 
