@@ -27,20 +27,24 @@ class Display(BoxLayout):
         p = 0
         print("blubber boy")
 
-        for i in range(24):
-            display.add_widget(Label(text=tlist[i]))
-        display.add_widget(Button(text="next", on_release=Display.next(self)))
+        Display.ihatethis(self, p)
 
         return self
 
-    def next(self):
+    def ihatethis(self, p):
+        for i in range(24):
+            display.add_widget(Label(text=tlist[i + (p * 24)]))
+
+        display.submit = Button(text="next")
+        display.submit.bind(on_release=display.next)
+        display.add_widget(display.submit)
+
+    def next(self, instance):
         print("beotch")
         display.clear_widgets()
         global p
         p = p + 1
-        for i in range(24):
-            display.add_widget(Label(text=tlist[i + (p * 24)]))
-        display.add_widget(Button())
+        Display.ihatethis(self, p)
 
 
 
