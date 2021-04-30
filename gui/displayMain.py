@@ -41,7 +41,7 @@ class Display(BoxLayout):
 
     def ihatethis(self, p):
         for i in range(24):
-            display.add_widget(Label(text=tlist[i + (p * 24)]))
+            display.add_widget(DisplayLabel(text=tlist[i + (p * 24)]))
 
         display.submit = Button(text="next")
         display.submit.bind(on_release=display.next)
@@ -59,7 +59,8 @@ class Display(BoxLayout):
         else:
             print("ur mom")
 
-
+class DisplayLabel(Label):
+    pass
 
 class Main(App):
     def build(self):
