@@ -43,9 +43,25 @@ class Display(BoxLayout):
         for i in range(24):
             display.add_widget(DisplayLabel(text=tlist[i + (p * 24)]))
 
+        display.previous = Button(text="previous")
+        display.previous.bind(on_release=display.next)
+        display.add_widget(display.previous)
+
         display.submit = Button(text="next")
         display.submit.bind(on_release=display.next)
         display.add_widget(display.submit)
+
+    def previous(self, instance):
+        print("beotch")
+        global p
+        global cap
+
+        p = p - 1
+        if p < cap:
+            display.clear_widgets()
+            Display.ihatethis(self, p)
+        else:
+            print("ur dad")
 
     def next(self, instance):
         print("beotch")
