@@ -1,4 +1,3 @@
-from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -7,81 +6,90 @@ from kivy.uix.widget import Widget
 
 Builder.load_file('displayMain.kv')
 
+# global variables
 display = Widget
-tlist ={}
-p = 0
+tlist = {}
+page = 0
 cap = 1
+disp_len = 24
 
+# initialize display panel
 class Display(BoxLayout):
 
+    # define reference to display widget
     def __init__(self, **kwargs):
         super(Display, self).__init__(**kwargs)
         global display
         display = self
 
+    # build display panel
     def build(self, list):
         global tlist
-        global p
+        global page
         global cap
+
+        # set global values
         display.clear_widgets()
-
         tlist = list
-        p = 0
+        page = 0
 
-        while len(tlist) % 24 != 0:
+        # ensure that list is divisible by display length
+        while len(tlist) % disp_len != 0:
             tlist.append("")
 
-        cap = len(tlist) / 24
+        cap = len(tlist) / disp_len
 
+        # cheeky debug note
         print("blubber boy")
 
-        Display.ihatethis(self, p)
+        Display.fillPanel(self, page)
 
         return self
 
-    def ihatethis(self, p):
-        for i in range(24):
-            display.add_widget(DisplayLabel(text=tlist[i + (p * 24)]))
+    # fill display panel contents
+    def fillPanel(self, p):
+        for i in range(disp_len):
+            display.add_widget(DisplayLabel(text=tlist[i + (p * disp_len)]))
 
+        # build previous button
         display.submit = Button(text="previous")
         display.submit.bind(on_release=display.previous)
         display.add_widget(display.submit)
 
+        # build next button
         display.submit = Button(text="next")
         display.submit.bind(on_release=display.next)
         display.add_widget(display.submit)
 
+    # go to last page
     def previous(self, instance):
-        print("the last beotch")
-        global p
-        global cap
 
-        if p > 0:
-            p = p - 1
+        global page
+
+        # check if page can go back
+        if page > 0:
+            page = page - 1
+            print("page " + str(page))
             display.clear_widgets()
-            Display.ihatethis(self, p)
+            Display.fillPanel(self, page)
         else:
-            print("ur dad")
+            print("on first page")
 
+    # go to next page
     def next(self, instance):
-        print("the next beotch")
-        global p
-        global cap
 
-        if p < cap:
-            p = p + 1
+        global page
+
+        # check if page can go forward
+        if (page + 1) < cap:
+            page = page + 1
+            print("page " + str(page))
             display.clear_widgets()
-            Display.ihatethis(self, p)
+            Display.fillPanel(self, page)
         else:
-            print("ur mom")
+            print("on last page")
 
+# initialize label widget
 class DisplayLabel(Label):
     pass
 
-class Main(App):
-    def build(self):
-        return Display()
-
-
-if __name__ == '__main__':
-    Main().run()
