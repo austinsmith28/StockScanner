@@ -472,7 +472,7 @@ def get_prices(array):
         stock_price_request = requests.get(price_url).json()
 
         res.append(stock_price_request['price'])
-    counter += 1
+        counter += 1
 
     return res
 ################################################################
