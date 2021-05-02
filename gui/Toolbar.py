@@ -1,8 +1,6 @@
 import main
-import displayMain
 import time
 from guiMain import Screen
-from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.spinner import Spinner
 from kivy.uix.gridlayout import GridLayout
@@ -26,11 +24,13 @@ class Technical(GridLayout):
 
 class Toolbar(Widget):
 
+    #create thread to prevent program from lagging
     def search(self):
-        t1 = Thread(target=Toolbar.build_thread, args=[self])
+        t1 = Thread(target=Toolbar.build_list, args=[self])
         t1.start()
         return
 
+    #builds and returns the dictionary to be sent to backend
     def build_dict(self):
         time1 = time.time_ns()
 
@@ -63,21 +63,20 @@ class Toolbar(Widget):
         print("Dictionary build time: " + str(time2 - time1) + " ns")
         return tool_dict
 
-    def build_thread(self):
+    #use dictionary to create the stock list
+    def build_list(self):
 
+        #set the dictionary values
         tool_dict = Toolbar.build_dict(self)
+
+        #set the list based on dictionary values
         time1 = time.time()
         tool_list = main.search(tool_dict)
         time2 = time.time()
         print("Function return time: " + str(time2 - time1) + " s")
+
         print(tool_list)
+
+        #send list back to the main function
         Screen.set_list(tool_list)
-        return
 
-class Main(App):
-    def build(self):
-        return Toolbar()
-
-
-if __name__ == '__main__':
-    Main().run()
