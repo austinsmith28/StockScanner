@@ -1,3 +1,4 @@
+import main
 from threading import Thread
 from displayMain import Display
 from kivy.app import App
@@ -20,10 +21,19 @@ class Screen(Widget):
     def set_list(list):
         global tlist
         tlist = list
-        t1 = Thread(target=Screen.build_thread, args=[display])
+        t1 = Thread(target=Screen.buildDisplayPanel, args=[display])
+        t2 = Thread(target=Screen.getPrices)
         t1.start()
+        t2.start()
 
-    def build_thread(self):
+    @staticmethod
+    def getPrices():
+        plist = main.get_prices(tlist)
+        print(plist)
+
+
+    # build display panel
+    def buildDisplayPanel(self):
         Display.build(self, tlist)
 
 class Main(App):
