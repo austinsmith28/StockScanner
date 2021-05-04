@@ -4,8 +4,6 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
-import main
-
 Builder.load_file('displayMain.kv')
 
 # global variables
@@ -51,9 +49,8 @@ class Display(BoxLayout):
 
 
     def addPrices(self, plist):
-        plist = main.get_prices(tlist[:24])
         for i in range(disp_len):
-            dislist[i].text = dislist[i].text + str("......") + plist[i + (page * disp_len)]
+            dislist[i].text = dislist[i].text + str(".......") + plist[i + (page * disp_len)]
 
 
     # fill display panel contents

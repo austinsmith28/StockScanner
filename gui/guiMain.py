@@ -27,7 +27,9 @@ class Screen(Widget):
         t2.start()
 
     def getPrices(self):
-        Display.addPrices(self, tlist)
+        plist = main.get_prices(tlist[:24])
+        print(plist)
+        Display.addPrices(self, plist)
 
 
     # build display panel
