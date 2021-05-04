@@ -22,14 +22,12 @@ class Screen(Widget):
         global tlist
         tlist = list
         t1 = Thread(target=Screen.buildDisplayPanel, args=[display])
-        t2 = Thread(target=Screen.getPrices)
+        t2 = Thread(target=Screen.getPrices, args=[display])
         t1.start()
         t2.start()
 
-    @staticmethod
-    def getPrices():
-        plist = main.get_prices(tlist)
-        print(plist)
+    def getPrices(self):
+        Display.addPrices(self, tlist)
 
 
     # build display panel

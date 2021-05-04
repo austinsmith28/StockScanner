@@ -4,11 +4,14 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
+import main
+
 Builder.load_file('displayMain.kv')
 
 # global variables
 display = Widget
-tlist = {}
+tlist = []
+dislist= []
 page = 0
 cap = 1
 disp_len = 24
@@ -46,10 +49,23 @@ class Display(BoxLayout):
 
         return self
 
+
+    def addPrices(self, plist):
+        plist = main.get_prices(tlist[:24])
+        for i in range(disp_len):
+            dislist[i].text = dislist[i].text + str("......") + plist[i + (page * disp_len)]
+
+
     # fill display panel contents
     def fillPanel(self, p):
+
+        global dislist
+
         for i in range(disp_len):
-            display.add_widget(DisplayLabel(text=tlist[i + (p * disp_len)]))
+            i = DisplayLabel(text=tlist[i + (p * disp_len)])
+            dislist.append(i)
+            display.add_widget(i)
+        print(dislist)
 
         # build previous button
         display.submit = Button(text="previous")
