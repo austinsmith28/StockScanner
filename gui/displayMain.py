@@ -4,8 +4,6 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
-import main
-
 Builder.load_file('displayMain.kv')
 
 # global variables
