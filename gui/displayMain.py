@@ -52,8 +52,23 @@ class Display(BoxLayout):
 
     def addPrices(self, plist):
         plist = main.get_prices(tlist[:24])
+        tmpstr = ""
         for i in range(disp_len):
-            dislist[i].text = dislist[i].text + str("......") + plist[i + (page * disp_len)]
+            count = 0
+            for y in dislist[i].text:
+                if y != "I":
+                    count = count + 1
+            if (count == 1):
+                tmpstr = "               "
+            elif (count == 2):
+                tmpstr = "             "
+            elif (count == 3):
+                tmpstr = "            "
+            elif (count == 4):
+                tmpstr = "         "
+            else:
+                tmpstr = "        "
+            dislist[i].text = dislist[i].text + tmpstr + plist[i + (page * disp_len)]
 
 
     # fill display panel contents
