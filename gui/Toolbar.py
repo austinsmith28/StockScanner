@@ -37,6 +37,7 @@ class Toolbar(Widget):
         fundamentals = self.ids.fundamentals.ids
         technical = self.ids.technical.ids
 
+        # dict to send to api
         tool_dict = {
             "asset": self.ids.asset.text,
 

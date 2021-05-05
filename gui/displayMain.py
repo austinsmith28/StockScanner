@@ -16,9 +16,9 @@ display = Widget
 tlist = []          # list of stock names
 plist = []          # list of prices
 dislist= []         # list of memory locations of labels
-page = 0
-cap = 1
-disp_len = 24
+page = 0            # current page
+cap = 1             # max number of pages
+disp_len = 24       # number of stocks to display per page
 
 # initialize display panel
 class Display(BoxLayout):
@@ -64,7 +64,9 @@ class Display(BoxLayout):
 
         display.add_widget(Header())
 
+        # fill each box in layout
         for i in range(disp_len):
+
             # create widgets to add to row
             box = GridLayout(cols=4, size_hint=(1, 1))
             name = DisplayLabel(text=str(tlist[i + p]))
@@ -80,8 +82,7 @@ class Display(BoxLayout):
 
             display.add_widget(box)
 
-        print(dislist)
-
+        # build layout to add nav buttons to
         fl = FloatLayout()
         display.add_widget(fl)
 

@@ -19,17 +19,17 @@ def setPrices(row):
 # check csv for prices and return price list
 def getPrices(list):
 
+    # read file
     with open('stockPrices.csv', mode='r+', newline='') as csv_file:
         csv_reader = csv.reader(csv_file)
-        csv_writer = csv.writer(csv_file)
 
         plist = []      # list of prices to return
-        update = []     # list to update entries in csv
-        lines = []
+        lines = []      # list of lines to write
 
         # itterate through stock list
         for row in csv_reader:
 
+            # used for checking change in list
             x = len(list)
 
             # itterate through input list
@@ -46,19 +46,22 @@ def getPrices(list):
                         plist.append(newPrice)
                         if newPrice == "*ERROR*":
                             continue
-                        # set update flag
+
                         newRow = [i, newPrice, today]
                         lines.append(newRow)
 
+                    # entry is up to date, return price from file and write line
                     else:
                         plist.append(row[1])
                         lines.append(row)
 
                     list.remove(i)
 
+                # check if list is empty
                 if x == 0:
                     break
 
+            # write line if skipped earlier
             if x == len(list):
                 lines.append(row)
 
@@ -79,6 +82,7 @@ def getPrices(list):
                 lines.append(row)
                 list.remove(list[0])
 
+    # write to file
     with open('stockPrices.csv', mode='w+', newline='') as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerows(lines)

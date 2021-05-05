@@ -12,11 +12,13 @@ display = Widget
 
 class Screen(Widget):
 
+    # initialize the display
     def __init__(self, **kwargs):
         super(Screen, self).__init__(**kwargs)
         global display
         display = self.ids.display
 
+    # set the list of stocks returned from api
     @staticmethod
     def set_list(list):
         global tlist
