@@ -2,6 +2,7 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
@@ -61,10 +62,24 @@ class Display(BoxLayout):
         p = page * disp_len
         plist = stockPrices.getPrices(tlist[p:p + disp_len])
 
+        display.add_widget(Header())
+
         for i in range(disp_len):
-            i = DisplayLabel(text=(str(tlist[i + p]) + str("..........") + str(plist[i])))
-            dislist.append(i)
-            display.add_widget(i)
+            # create widgets to add to row
+            box = GridLayout(cols=4, size_hint=(1, 1))
+            name = DisplayLabel(text=str(tlist[i + p]))
+            price = DisplayLabel(text=plist[i])
+
+            dislist.append(name)
+
+            # add in widgets
+            box.add_widget(name)
+            box.add_widget(price)
+            box.add_widget(Label())   # empty cell for future use
+            box.add_widget(Label())   # empty cell for future use
+
+            display.add_widget(box)
+
         print(dislist)
 
         fl = FloatLayout()
@@ -112,3 +127,5 @@ class Display(BoxLayout):
 class DisplayLabel(Label):
     pass
 
+class Header(GridLayout):
+    pass
