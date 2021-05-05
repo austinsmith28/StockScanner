@@ -1,6 +1,7 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
@@ -66,16 +67,18 @@ class Display(BoxLayout):
             display.add_widget(i)
         print(dislist)
 
+        fl = FloatLayout()
+        display.add_widget(fl)
 
         # build previous button
-        display.submit = Button(text="previous")
-        display.submit.bind(on_release=display.previous)
-        display.add_widget(display.submit)
+        fl.submit = Button(text="previous", size_hint=(.5, 1), pos_hint={'x': 0})
+        fl.submit.bind(on_release=display.previous)
+        fl.add_widget(fl.submit)
 
         # build next button
-        display.submit = Button(text="next")
-        display.submit.bind(on_release=display.next)
-        display.add_widget(display.submit)
+        fl.submit = Button(text="next", size_hint=(.5, 1), pos_hint={'x': .5})
+        fl.submit.bind(on_release=display.next)
+        fl.add_widget(fl.submit)
 
     # go to last page
     def previous(self, instance):
