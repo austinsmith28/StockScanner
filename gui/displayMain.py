@@ -4,12 +4,16 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
+import main
+from gui import stockPrices
+
 Builder.load_file('displayMain.kv')
 
 # global variables
 display = Widget
-tlist = []
-dislist= []
+tlist = []          # list of stock names
+plist = []          # list of prices
+dislist= []         # list of memory locations of labels
 page = 0
 cap = 1
 disp_len = 24
@@ -43,42 +47,25 @@ class Display(BoxLayout):
         # cheeky debug note
         print("blubber boy")
 
-        Display.fillPanel(self, page)
+        Display.fillPanel(self)
 
         return self
 
-
-    def addPrices(self, plist):
-        plist = main.get_prices(tlist[:24])
-        tmpstr = ""
-        for i in range(disp_len):
-            count = 0
-            for y in dislist[i].text:
-                if y != "I":
-                    count = count + 1
-            if (count == 1):
-                tmpstr = "               "
-            elif (count == 2):
-                tmpstr = "             "
-            elif (count == 3):
-                tmpstr = "            "
-            elif (count == 4):
-                tmpstr = "         "
-            else:
-                tmpstr = "        "
-            dislist[i].text = dislist[i].text + tmpstr + plist[i + (page * disp_len)]
-
-
     # fill display panel contents
-    def fillPanel(self, p):
+    def fillPanel(self):
 
         global dislist
+        global plist
+
+        p = page * disp_len
+        plist = stockPrices.getPrices(tlist[p:p + disp_len])
 
         for i in range(disp_len):
-            i = DisplayLabel(text=tlist[i + (p * disp_len)])
+            i = DisplayLabel(text=(str(tlist[i + p]) + str("..........") + str(plist[i])))
             dislist.append(i)
             display.add_widget(i)
         print(dislist)
+
 
         # build previous button
         display.submit = Button(text="previous")
@@ -100,7 +87,7 @@ class Display(BoxLayout):
             page = page - 1
             print("page " + str(page))
             display.clear_widgets()
-            Display.fillPanel(self, page)
+            Display.fillPanel(self)
         else:
             print("on first page")
 
@@ -114,7 +101,7 @@ class Display(BoxLayout):
             page = page + 1
             print("page " + str(page))
             display.clear_widgets()
-            Display.fillPanel(self, page)
+            Display.fillPanel(self)
         else:
             print("on last page")
 
