@@ -13,7 +13,7 @@ def setPrices(row):
 
 def getPrices(list):
 
-    with open('stockPrices.csv', mode='r+') as csv_file:
+    with open('stockPrices.csv', mode='r+', newline='') as csv_file:
         csv_reader = csv.reader(csv_file)
         csv_writer = csv.writer(csv_file)
 
@@ -40,6 +40,7 @@ def getPrices(list):
                 row = [list[0], "0", "0"]
                 row[1] = setPrices(row)
                 row[2] = today
+                print(row)
                 csv_writer.writerow(row)
                 plist.append(row[1])
                 list.remove(list[0])
