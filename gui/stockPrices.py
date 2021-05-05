@@ -7,7 +7,8 @@ today = today.strftime("%Y%m%d")
 
 
 def setPrices(row):
-    newPrice = main.get_prices([row[0]])
+    arr = main.get_prices([row[0]])
+    newPrice = arr[0]
     return newPrice
 
 def getPrices(list):

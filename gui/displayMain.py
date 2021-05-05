@@ -68,7 +68,7 @@ class Display(BoxLayout):
             # create widgets to add to row
             box = GridLayout(cols=4, size_hint=(1, 1))
             name = DisplayLabel(text=str(tlist[i + p]))
-            price = DisplayLabel(text=plist[i])
+            price = DisplayLabel(text=str(plist[i]))
 
             dislist.append(name)
 
